@@ -1,6 +1,7 @@
 package zabbix
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -25,8 +26,9 @@ const (
 
 // Context struct is used for store settings to communicate with Zabbix API
 type Context struct {
-	sessionKey string
-	host       string
+	sessionKey   string
+	host         string
+	tlsCheckSkip bool
 }
 
 // GetParameters struct is used as embedded struct for some other structs within package
@@ -106,6 +108,11 @@ func (z *Context) Logout() error {
 	return nil
 }
 
+// Set TLS skip in Zabbix session
+func (z *Context) SetTLSSkip(Flag bool) {
+	z.tlsCheckSkip = Flag
+}
+
 func (z *Context) request(method string, params interface{}, result interface{}) (int, error) {
 
 	resp := responseData{
@@ -146,8 +153,19 @@ func (z *Context) httpPost(in interface{}, out interface{}) (int, error) {
 	// Set headers
 	req.Header.Add("Content-Type", "application/json-rpc")
 
+	var client = &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				// See comment above.
+				// UNSAFE!
+				// DON'T USE IN PRODUCTION!
+				InsecureSkipVerify: z.tlsCheckSkip,
+			},
+		},
+	}
+
 	// Make request
-	res, err := http.DefaultClient.Do(req)
+	res, err := client.Do(req)
 	if err != nil {
 		return 0, err
 	}
