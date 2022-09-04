@@ -14,6 +14,7 @@ const (
 	testUserMediaEmail    = "test_user@domain.com"
 	testUserMediaSeverity = 63
 	testUserMediaPeriod   = "1-7,00:00-24:00"
+	testUserRoleId        = "2"
 )
 
 func TestUserCRUD(t *testing.T) {
@@ -49,14 +50,14 @@ func testUserCreate(t *testing.T, z Context, ugCreatedIDs []int) []int {
 
 	uCreatedIDs, _, err := z.UserCreate([]UserObject{
 		{
-			Alias:      testUserAlias,
+			Username:   testUserAlias,
 			Name:       testUserName,
 			Surname:    testUserSurname,
 			Passwd:     testUserPasswd,
 			AutoLogin:  UserAutoLoginDisabled,
 			AutoLogout: "15m",
 			Lang:       testUserLang,
-			Type:       UserTypeUser,
+			RoleID:     testUserRoleId,
 			Refresh:    "90s",
 			Usrgrps:    usergroups,
 			UserMedias: []MediaObject{

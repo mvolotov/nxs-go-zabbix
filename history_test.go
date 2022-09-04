@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	testHistoryItemID = 45503
+	testHistoryItemID = 42230
 	testHistoryType   = 0
 )
 

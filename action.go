@@ -8,8 +8,14 @@ const (
 
 // For `ActionObject` field: `PauseSuppressed`
 const (
-	ActionPauseSuppressedEnabled  = 0
-	ActionPauseSuppressedDisabled = 1
+	ActionPauseSuppressedEnabled  = 1
+	ActionPauseSuppressedDisabled = 0
+)
+
+// For `ActionObject` field: `NotifyIfCanceled`
+const (
+	ActionCancelEscNotifyDisabled = 0
+	ActionCancelEscNotifyEnabled  = 1
 )
 
 // For `ActionOperationObject` field: `OperationType`
@@ -143,17 +149,18 @@ const (
 //
 // see: https://www.zabbix.com/documentation/5.0/manual/api/reference/action/object#action
 type ActionObject struct {
-	ActionID        int    `json:"actionid,omitempty"`
-	EscPeriod       int    `json:"esc_period"`
-	Eventsource     int    `json:"eventsource"`
-	Name            string `json:"name"`
-	Status          int    `json:"status,omitempty"`           // has defined consts, see above
-	PauseSuppressed int    `json:"pause_suppressed,omitempty"` // has defined consts, see above
+	ActionID         int    `json:"actionid,omitempty"`
+	EscPeriod        int    `json:"esc_period"`
+	Eventsource      int    `json:"eventsource"`
+	Name             string `json:"name"`
+	Status           int    `json:"status,omitempty"`             // has defined consts, see above
+	PauseSuppressed  int    `json:"pause_suppressed,omitempty"`   // has defined consts, see above
+	NotifyIfCanceled int    `json:"notify_if_canceled,omitempty"` // has defined consts, see above
 
-	Operations            []ActionOperationObject         `json:"operations,omitempty"`
-	Filter                ActionFilterObject              `json:"filter,omitempty"`
-	RecoveryOperations    []ActionRecoveryOperationObject `json:"recovery_operations,omitempty"`
-	AcknowledgeOperations []ActionRecoveryOperationObject `json:"acknowledge_operations,omitempty"`
+	Operations         []ActionOperationObject         `json:"operations,omitempty"`
+	Filter             ActionFilterObject              `json:"filter,omitempty"`
+	RecoveryOperations []ActionRecoveryOperationObject `json:"recovery_operations,omitempty"`
+	UpdateOperations   []ActionRecoveryOperationObject `json:"update_operations,omitempty"`
 }
 
 // ActionOperationObject struct is used to store action operations
@@ -260,8 +267,8 @@ type ActionFilterObject struct {
 // see: https://www.zabbix.com/documentation/5.0/manual/api/reference/action/object#action_filter_condition
 type ActionFilterConditionObject struct {
 	ConditionID   int    `json:"conditionid,omitempty"`
-	ConditionType int    `json:"conditiontype"` // has defined consts, see above
-	Value         string `json:"value"`
+	ConditionType int    `json:"conditiontype"`   // has defined consts, see above
+	Value         string `json:"value,omitempty"` // required field, but set option omitepmty for condition with "Yes/No" operator
 	Value2        string `json:"value2,omitempty"`
 	ActionID      int    `json:"actionid,omitempty"`
 	FormulaID     string `json:"formulaid,omitempty"`

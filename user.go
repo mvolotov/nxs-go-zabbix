@@ -13,13 +13,6 @@ const (
 	UserThemeDark    = "dark-theme"
 )
 
-// For `UserObject` field: `Type`
-const (
-	UserTypeUser       = 1
-	UserTypeAdmin      = 2
-	UserTypeSuperAdmin = 3
-)
-
 // For `MediaObject` field: `Active`
 const (
 	MediaActiveEnabled  = 0
@@ -31,7 +24,7 @@ const (
 // see: https://www.zabbix.com/documentation/5.0/manual/api/reference/user/object
 type UserObject struct {
 	UserID        int    `json:"userid,omitempty"`
-	Alias         string `json:"alias,omitempty"`
+	Username      string `json:"username,omitempty"`
 	AttemptClock  int    `json:"attempt_clock,omitempty"`
 	AttemptFailed int    `json:"attempt_failed,omitempty"`
 	AttemptIP     string `json:"attempt_ip,omitempty"`
@@ -43,8 +36,9 @@ type UserObject struct {
 	RowsPerPage   int    `json:"rows_per_page,omitempty"`
 	Surname       string `json:"surname,omitempty"`
 	Theme         string `json:"theme,omitempty"` // has defined consts, see above
-	Type          int    `json:"type,omitempty"`  // has defined consts, see above
 	URL           string `json:"url,omitempty"`
+	Timezone      string `json:"timezone,omitempty"`
+	RoleID        string `json:"roleid"`
 
 	// used for user.login
 	UserDataObject

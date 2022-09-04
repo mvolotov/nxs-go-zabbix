@@ -51,8 +51,8 @@ func testActionCreate(t *testing.T, z Context, hostgrpID, usergrpID int) []int {
 					},
 					{
 						ConditionType: ActionFilterConditionTypeHostroup,
-						Operator:      ActionFilterConditionOperatorEQ,
 						Value:         strconv.Itoa(hostgrpID),
+						Operator:      ActionFilterConditionOperatorNE,
 					},
 				},
 			},
