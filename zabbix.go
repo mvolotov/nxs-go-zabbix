@@ -94,6 +94,12 @@ func (z *Context) Login(host, user, password string) error {
 	return nil
 }
 
+// Authorization using a generated API key for Zabbix 5.4+
+func (z *Context) LoginAPIKey(host, key string) {
+	z.host = host
+	z.sessionKey = key
+}
+
 // Logout destroys the Zabbix session
 func (z *Context) Logout() error {
 
