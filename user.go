@@ -21,10 +21,10 @@ const (
 
 // UserObject struct is used to store user operations results
 //
-// see: https://www.zabbix.com/documentation/5.0/manual/api/reference/user/object
+// see: https://www.zabbix.com/documentation/6.0/manual/api/reference/user/object
 type UserObject struct {
 	UserID        int    `json:"userid,omitempty"`
-	Username      string `json:"username,omitempty"`
+	Username      string `json:"username"`
 	AttemptClock  int    `json:"attempt_clock,omitempty"`
 	AttemptFailed int    `json:"attempt_failed,omitempty"`
 	AttemptIP     string `json:"attempt_ip,omitempty"`
@@ -54,10 +54,10 @@ type UserObject struct {
 
 // MediaObject struct is used to store media operations results
 //
-// see: https://www.zabbix.com/documentation/5.0/manual/api/reference/user/object#media
+// see: https://www.zabbix.com/documentation/6.0/manual/api/reference/user/object#media
 type MediaObject struct {
-	MediaID     int      `json:"mediaid,omitempty"`
-	MediaTypeID int      `json:"mediatypeid,omitempty"`
+	MediaID     string   `json:"mediaid,omitempty"`
+	MediaTypeID string   `json:"mediatypeid,omitempty"`
 	SendTo      []string `json:"sendto,omitempty"`
 	Active      int      `json:"active,omitempty"` // has defined consts, see above
 	Severity    int      `json:"severity,omitempty"`
@@ -66,7 +66,7 @@ type MediaObject struct {
 
 // UserLoginParams struct is used for login requests
 //
-// see: https://www.zabbix.com/documentation/5.0/manual/api/reference/user/login#parameters
+// see: https://www.zabbix.com/documentation/6.0/manual/api/reference/user/login#parameters
 type UserLoginParams struct {
 	User     string `json:"user"`
 	Password string `json:"password"`
@@ -75,7 +75,7 @@ type UserLoginParams struct {
 
 // UserDataObject struct is used to store authenticated user additional info
 //
-// see: https://www.zabbix.com/documentation/5.0/manual/api/reference/user/login#return_values
+// see: https://www.zabbix.com/documentation/6.0/manual/api/reference/user/login#return_values
 type UserDataObject struct {
 	DebugMode bool   `json:"debug_mode,omitempty"`
 	GUIAccess int    `json:"gui_access,omitempty"`
@@ -85,29 +85,30 @@ type UserDataObject struct {
 
 // UserGetParams struct is used for user get requests
 //
-// see: https://www.zabbix.com/documentation/5.0/manual/api/reference/user/get#parameters
+// see: https://www.zabbix.com/documentation/6.0/manual/api/reference/user/get#parameters
 type UserGetParams struct {
 	GetParameters
 
-	MediaIDs     []int `json:"mediaids,omitempty"`
-	NediatypeIDs []int `json:"mediatypeids,omitempty"`
-	UserIDs      []int `json:"userids,omitempty"`
-	UsrgrpIDs    []int `json:"usrgrpids,omitempty"`
+	MediaIDs     []string `json:"mediaids,omitempty"`
+	NediatypeIDs []string `json:"mediatypeids,omitempty"`
+	UserIDs      []string `json:"userids,omitempty"`
+	UsrgrpIDs    []string `json:"usrgrpids,omitempty"`
 
 	GetAccess        bool        `json:"getAccess,omitempty"`
 	SelectMedias     SelectQuery `json:"selectMedias,omitempty"`
 	SelectMediatypes SelectQuery `json:"selectMediatypes,omitempty"`
 	SelectUsrgrps    SelectQuery `json:"selectUsrgrps,omitempty"`
+	SelectRole       SelectQuery `json:"selectRole,omitempty"`
 }
 
 // Structure to store creation result
 type userCreateResult struct {
-	UserIDs []int `json:"userids"`
+	UserIDs []string `json:"userids"`
 }
 
 // Structure to store deletion result
 type userDeleteResult struct {
-	UserIDs []int `json:"userids"`
+	UserIDs []string `json:"userids"`
 }
 
 // UserGet gets users
@@ -124,7 +125,7 @@ func (z *Context) UserGet(params UserGetParams) ([]UserObject, int, error) {
 }
 
 // UserCreate creates users
-func (z *Context) UserCreate(params []UserObject) ([]int, int, error) {
+func (z *Context) UserCreate(params []UserObject) ([]string, int, error) {
 
 	var result userCreateResult
 
@@ -137,7 +138,7 @@ func (z *Context) UserCreate(params []UserObject) ([]int, int, error) {
 }
 
 // UserDelete deletes users
-func (z *Context) UserDelete(userIDs []int) ([]int, int, error) {
+func (z *Context) UserDelete(userIDs []string) ([]string, int, error) {
 
 	var result userDeleteResult
 

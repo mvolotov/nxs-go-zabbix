@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	testHistoryItemID = 42230
+	testHistoryItemID = "42230"
 	testHistoryType   = 0
 )
 
@@ -27,7 +27,7 @@ func testHistoryGet(t *testing.T, z Context) []HistoryFloatObject {
 
 	hObjects, _, err := z.HistoryGet(HistoryGetParams{
 		History: HistoryObjectTypeFloat,
-		ItemIDs: []int{testHistoryItemID},
+		ItemIDs: []string{testHistoryItemID},
 		GetParameters: GetParameters{
 			Limit: 1,
 		},

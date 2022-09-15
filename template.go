@@ -14,12 +14,13 @@ const (
 
 // TemplateObject struct is used to store template operations results
 //
-// see: https://www.zabbix.com/documentation/5.0/manual/api/reference/template/object
+// see: https://www.zabbix.com/documentation/6.0/manual/api/reference/template/object
 type TemplateObject struct {
-	TemplateID  int    `json:"templateid,omitempty"`
-	Host        string `json:"host,omitempty"`
-	Description string `json:"description,omitempty"`
-	Name        string `json:"name,omitempty"`
+	TemplateID   string `json:"templateid,omitempty"`
+	Host         string `json:"host"`
+	Description  string `json:"description,omitempty"`
+	Name         string `json:"name,omitempty"`
+	TemplateUUID string `json:"uuid,omitempty"`
 
 	Groups          []HostgroupObject   `json:"groups,omitempty"`
 	Tags            []TemplateTagObject `json:"tags,omitempty"`
@@ -31,9 +32,9 @@ type TemplateObject struct {
 
 // TemplateTagObject struct is used to store template tag data
 //
-// see: https://www.zabbix.com/documentation/5.0/manual/api/reference/template/object#template_tag
+// see: https://www.zabbix.com/documentation/6.0/manual/api/reference/template/object#template_tag
 type TemplateTagObject struct {
-	Tag   string `json:"tag,omitempty"`
+	Tag   string `json:"tag"`
 	Value string `json:"value,omitempty"`
 
 	Operator int `json:"operator,omitempty"` // Used for `get` operations, has defined consts, see above
@@ -41,17 +42,17 @@ type TemplateTagObject struct {
 
 // TemplateGetParams struct is used for template get requests
 //
-// see: https://www.zabbix.com/documentation/5.0/manual/api/reference/template/get#parameters
+// see: https://www.zabbix.com/documentation/6.0/manual/api/reference/template/get#parameters
 type TemplateGetParams struct {
 	GetParameters
 
-	TemplateIDs       []int `json:"templateids,omitempty"`
-	GroupIDs          []int `json:"groupids,omitempty"`
-	ParentTemplateIDs []int `json:"parentTemplateids,omitempty"`
-	HostIDs           []int `json:"hostids,omitempty"`
-	GraphIDs          []int `json:"graphids,omitempty"`
-	ItemIDs           []int `json:"itemids,omitempty"`
-	TriggerIDs        []int `json:"triggerids,omitempty"`
+	TemplateIDs       []string `json:"templateids,omitempty"`
+	GroupIDs          []string `json:"groupids,omitempty"`
+	ParentTemplateIDs []string `json:"parentTemplateids,omitempty"`
+	HostIDs           []string `json:"hostids,omitempty"`
+	GraphIDs          []string `json:"graphids,omitempty"`
+	ItemIDs           []string `json:"itemids,omitempty"`
+	TriggerIDs        []string `json:"triggerids,omitempty"`
 
 	WithItems     bool                `json:"with_items,omitempty"`
 	WithTriggers  bool                `json:"with_triggers,omitempty"`
@@ -72,18 +73,18 @@ type TemplateGetParams struct {
 	// SelectDiscoveries     SelectQuery `json:"selectDiscoveries,omitempty"` // not implemented yet
 	// SelectTriggers        SelectQuery `json:"selectTriggers,omitempty"` // not implemented yet
 	// SelectGraphs          SelectQuery `json:"selectGraphs,omitempty"` // not implemented yet
-	// SelectApplications    SelectQuery `json:"selectApplications,omitempty"` // not implemented yet
-	// SelectScreens         SelectQuery `json:"selectScreens,omitempty"` // not implemented yet
+
+	LimitSelects int `json:"limitSelects,omitempty"` // use for limit records returned by subselects e.g.: selectTemplates, selectHosts, selectParentTemplates etc...
 }
 
 // Structure to store creation result
 type templateCreateResult struct {
-	TemplateIDs []int `json:"templateids"`
+	TemplateIDs []string `json:"templateids"`
 }
 
 // Structure to store deletion result
 type templateDeleteResult struct {
-	TemplateIDs []int `json:"templateids"`
+	TemplateIDs []string `json:"templateids"`
 }
 
 // TemplateGet gets templates
@@ -100,7 +101,7 @@ func (z *Context) TemplateGet(params TemplateGetParams) ([]TemplateObject, int, 
 }
 
 // TemplateCreate creates templates
-func (z *Context) TemplateCreate(params []TemplateObject) ([]int, int, error) {
+func (z *Context) TemplateCreate(params []TemplateObject) ([]string, int, error) {
 
 	var result templateCreateResult
 
@@ -113,7 +114,7 @@ func (z *Context) TemplateCreate(params []TemplateObject) ([]int, int, error) {
 }
 
 // TemplateDelete deletes templates
-func (z *Context) TemplateDelete(templateIDs []int) ([]int, int, error) {
+func (z *Context) TemplateDelete(templateIDs []string) ([]string, int, error) {
 
 	var result templateDeleteResult
 
