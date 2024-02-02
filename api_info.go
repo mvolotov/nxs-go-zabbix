@@ -1,7 +1,7 @@
 package zabbix
 
 // ApiGet gets zabbix api version
-func (z *Context) ApiGet() (string, int, error) {
+func (z *Context) ApiGetVersion() (string, int, error) {
 
 	var result string
 
