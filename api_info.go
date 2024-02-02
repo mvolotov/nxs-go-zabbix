@@ -1,7 +1,10 @@
 package zabbix
 
 // ApiGet gets zabbix api version
-func (z *Context) ApiGetVersion() (string, int, error) {
+func (z *Context) ApiGetVersion(ZbxAPIHost string) (string, int, error) {
+
+	zbuff := z.host
+	z.host = ZbxAPIHost
 
 	var result string
 
@@ -9,6 +12,8 @@ func (z *Context) ApiGetVersion() (string, int, error) {
 	if err != nil {
 		return "", status, err
 	}
+
+	z.host = zbuff
 
 	return result, status, nil
 }
