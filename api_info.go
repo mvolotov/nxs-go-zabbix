@@ -8,7 +8,7 @@ func (z *Context) ApiGetVersion(ZbxAPIHost string) (string, int, error) {
 
 	var result string
 
-	status, err := z.request("alert.get", nil, &result)
+	status, err := z.request("apiinfo.version", nil, &result)
 	if err != nil {
 		return "", status, err
 	}
